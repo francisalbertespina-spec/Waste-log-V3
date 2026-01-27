@@ -586,15 +586,17 @@ td a.photo-link {
 }
 
 .login-loading-ui {
-  display: none;              /* HIDDEN by default */
+  display: none;   /* hidden by default */
   width: 100%;
   min-height: 150px;
 
+  display: flex;              /* ALWAYS flex */
   flex-direction: column;
-  justify-content: center;    /* vertical */
-  align-items: center;        /* horizontal */
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
+
 
 .login-loading-ui p {
   margin-top: 10px;
