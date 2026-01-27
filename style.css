@@ -586,13 +586,13 @@ td a.photo-link {
 
 .login-loading-ui {
   display: none;
-  height: 150px;              /* gives space to center */
-  display: flex;
+  height: 150px;
   flex-direction: column;
-  justify-content: center;   /* vertical */
-  align-items: center;       /* horizontal */
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
+
 
 .login-loading-ui p {
   margin-top: 10px;
