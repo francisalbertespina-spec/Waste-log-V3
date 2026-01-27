@@ -425,7 +425,7 @@ function parseJwt(token) {
 
 // Google login handler
 async function handleCredentialResponse(response) {
-  setLoginLoading(false);
+  setLoginLoading(true);   // ✅ start spinner ONLY after click
 
   const responsePayload = parseJwt(response.credential);
   const email = responsePayload.email.toLowerCase();
@@ -435,20 +435,17 @@ async function handleCredentialResponse(response) {
     const res = await fetch(checkURL);
     const data = await res.json();
 
+    setLoginLoading(false); // stop spinner
+
     if (data.status === "Approved") {
       localStorage.setItem("userToken", data.token);
-
-      setLoginLoading(false);     // 👈 STOP SPINNER FIRST
-      showSection("package-section"); // 👈 THEN SHOW PACKAGE
-
+      showSection("package-section");
       showToast(`Welcome, ${responsePayload.name}!`, "success");
     } 
     else if (data.status === "Rejected") {
-      setLoginLoading(false);
       showToast("Access denied by admin", "error");
     } 
     else {
-      setLoginLoading(false);
       showToast("Awaiting admin approval", "info");
     }
 
@@ -458,6 +455,7 @@ async function handleCredentialResponse(response) {
     showToast("Connection error", "error");
   }
 }
+
 
 
 
@@ -526,6 +524,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
