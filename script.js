@@ -281,21 +281,42 @@ async function loadHistory() {
         day: "numeric"
       });
 
+      const imgUrl = convertDriveLink(r[5]);
+
+      const photoLink = r[5]
+        ? `<a class="photo-link" onclick="openImageModal('${imgUrl}')">View</a>`
+        : '—';
+
+
       const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${date}</td>
-        <td>${r[1]}</td>
-        <td>${r[2]}</td>
-        <td>${r[4]}</td>
-      `;
-      tbody.appendChild(tr);
-    });
+            tr.innerHTML = `
+            <td>${date}</td>
+            <td>${r[1]}</td>
+            <td>${r[2]}</td>
+            <td>${r[4]}</td>
+            <td>${photoLink}</td>
+            `;
+            tbody.appendChild(tr);
+          });
   } catch (err) {
     document.getElementById('loading').style.display = 'none';
     showToast('Error loading data', 'error');
     console.error(err);
   }
 }
+
+// G Drive URL converter
+function convertDriveLink(url) {
+  if (!url) return "";
+
+  // Extract file ID
+  const match = url.match(/\/d\/([^/]+)/);
+  if (!match) return url;
+
+  const fileId = match[1];
+  return `https://drive.google.com/uc?id=${fileId}`;
+}
+
 
 // Export to XLSX
 async function exportExcel() {
@@ -438,6 +459,25 @@ window.onload = function() {
     }
   }
 };
+
+// modal function
+function openImageModal(url) {
+  const modal = document.getElementById("imageModal");
+  const img = document.getElementById("modalImage");
+
+  img.src = url;
+  modal.style.display = "flex";
+}
+
+function closeImageModal() {
+  const modal = document.getElementById("imageModal");
+  const img = document.getElementById("modalImage");
+
+  img.src = "";
+  modal.style.display = "none";
+}
+
+
 
 
 
