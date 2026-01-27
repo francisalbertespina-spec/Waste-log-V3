@@ -283,8 +283,12 @@ async function addEntry() {
 
     const res = await fetchWithTimeout(scriptURL, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(rowData)
     }, 30000);
+
 
     clearTimeout(slowTimer);
 
@@ -638,6 +642,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
