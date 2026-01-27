@@ -7,7 +7,7 @@ window.isUploading = false;
 const DEV_MODE = false; // Set to false for production
 
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbwVU1ixtBgb-wwqxw8gVPefD7ZuzLXd4EVyFOnB6vq-AW5KLVQkE8Q1P7c0zotGEoHl/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbxqc3dsXfdWgfXz0X3CrFZicqZ0xCk3V5ogo4PIODbVy1OLfayYQaKwX4KPs4g6Vdyu/exec";
 
 
 // Waste-Log-Auth-V3
@@ -642,6 +642,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
