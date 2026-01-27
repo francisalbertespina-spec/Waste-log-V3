@@ -365,6 +365,20 @@ body {
 .toast.error .icon { color: #f44336; }
 .toast.info .icon { color: #2196f3; }
 
+.toast-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+.toast-message {
+  white-space: nowrap;
+}
+
 /* Table */
 .table-wrapper {
   margin-top: 20px;
