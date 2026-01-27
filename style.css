@@ -400,6 +400,15 @@ tr:hover {
   background: #f9f9f9;
 }
 
+/* User (email) column */
+th:nth-child(4),
+td:nth-child(4) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
 /* Photo column width */
 th:nth-child(5),
 td:nth-child(5) {
