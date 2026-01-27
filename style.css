@@ -576,22 +576,21 @@ td a.photo-link {
   border-top: 3px solid #d32f2f;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  left: 47%
 }
 
 
 .login-loading-ui {
   display: none;
-  height: 150px;
+  width: 100%;
+  min-height: 150px;
+
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: center;   /* vertical */
+  align-items: center;       /* horizontal */
   text-align: center;
 }
+
 
 
 .login-loading-ui p {
@@ -601,7 +600,7 @@ td a.photo-link {
 }
 
 #loginWrapper {
-  min-height: 120px;
   position: relative;
+  width: 100%;
 }
 
