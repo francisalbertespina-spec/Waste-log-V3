@@ -403,11 +403,10 @@ tr:hover {
 /* User (email) column */
 th:nth-child(4),
 td:nth-child(4) {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 120px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
+
 
 /* Photo column width */
 th:nth-child(5),
