@@ -28,18 +28,19 @@ function showToast(message, type = 'info', options = {}) {
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
 
-  // If spinner requested, use spinner instead of icon
-  const iconHTML = options.spinner 
-    ? `<div class="toast-spinner"></div>` 
+  // Spinner HTML (only if requested)
+  const spinnerHTML = options.spinner
+    ? `<div class="toast-spinner"></div>`
     : `<div class="icon">${icons[type]}</div>`;
 
   toast.innerHTML = `
-    ${iconHTML}
+    ${spinnerHTML}
     <div>${message}</div>
   `;
 
   document.body.appendChild(toast);
 
+  // Auto-remove ONLY if not persistent
   if (!options.persistent) {
     setTimeout(() => {
       toast.style.animation = 'slideInRight 0.3s ease-out reverse';
@@ -47,7 +48,7 @@ function showToast(message, type = 'info', options = {}) {
     }, 3000);
   }
 
-  return toast;
+  return toast; // allows manual remove
 }
 
 
@@ -584,6 +585,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
