@@ -39,14 +39,18 @@ function showToast(message, type = 'info') {
 
 function setLoginLoading(isLoading) {
   const btn = document.getElementById("buttonDiv");
-  if (!btn) return;
+  const spinner = document.getElementById("loginSpinner");
+
+  if (!btn || !spinner) return;
 
   if (isLoading) {
     btn.style.pointerEvents = "none";
-    btn.style.opacity = "0.6";
+    btn.style.opacity = "0.5";
+    spinner.style.display = "block";
   } else {
     btn.style.pointerEvents = "auto";
     btn.style.opacity = "1";
+    spinner.style.display = "none";
   }
 }
 
@@ -516,6 +520,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
