@@ -39,20 +39,19 @@ function showToast(message, type = 'info') {
 
 function setLoginLoading(isLoading) {
   const btn = document.getElementById("buttonDiv");
-  const spinner = document.getElementById("loginSpinner");
+  const loadingUI = document.getElementById("loginLoadingUI");
 
-  if (!btn || !spinner) return;
+  if (!btn || !loadingUI) return;
 
   if (isLoading) {
-    btn.style.pointerEvents = "none";
-    btn.style.opacity = "0.5";
-    spinner.style.display = "block";
+    btn.style.display = "none";
+    loadingUI.style.display = "block";
   } else {
-    btn.style.pointerEvents = "auto";
-    btn.style.opacity = "1";
-    spinner.style.display = "none";
+    btn.style.display = "flex";
+    loadingUI.style.display = "none";
   }
 }
+
 
 
 // Section management
@@ -525,6 +524,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
