@@ -569,32 +569,6 @@ td a.photo-link {
   text-decoration: underline;
 }
 
-#loginWrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-
-.login-loading-ui {
-  display: none;              /* hidden by default */
-  width: 100%;
-  min-height: 150px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;        /* TRUE horizontal center */
-  text-align: center;
-}
-
-
-.login-loading-ui p {
-  margin-top: 10px;
-  color: #666;
-  font-weight: 500;
-}
-
 .login-spinner {
   width: 28px;
   height: 28px;
@@ -604,7 +578,27 @@ td a.photo-link {
   animation: spin 0.8s linear infinite;
 }
 
+.login-loading-ui {
+  display: none;              /* HIDDEN by default */
+  width: 100%;
+  min-height: 150px;
 
+  flex-direction: column;
+  justify-content: center;    /* vertical */
+  align-items: center;        /* horizontal */
+  text-align: center;
+}
 
+.login-loading-ui p {
+  margin-top: 10px;
+  color: #666;
+  font-weight: 500;
+}
 
+#loginWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;    /* center horizontally */
+}
 
