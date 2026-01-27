@@ -2,7 +2,7 @@ let loadedRows = [];
 let selectedPackage = "";
 let compressedImageBase64 = "";
 
-const DEV_MODE = false; // Set to false for production
+const DEV_MODE = True; // Set to false for production
 
 const scriptURL = "https://script.google.com/macros/s/AKfycbwpSUI8zSMeNiDLoLdqNRWmJuOw3HIRR2Txev_YXnX782TW6zcL0yXeJglCiJ9qLmA/exec";
 
@@ -585,6 +585,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
