@@ -576,6 +576,11 @@ td a.photo-link {
   border-top: 3px solid #d32f2f;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  left: 47%
 }
 
 
