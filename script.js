@@ -207,12 +207,11 @@ async function addEntry() {
   
   const token = localStorage.getItem("userToken");
   if (!token) {
-  showToast("Session expired. Please log in again.", "error");
-  showSection("login-section");
-  return;
+    showToast("Session expired. Please log in again.", "error");
+    showSection("login-section");
+    return;
   }
 
-  
   if (!validateForm()) {
     showToast('Please fill in all required fields', 'error');
     return;
@@ -223,38 +222,34 @@ async function addEntry() {
     return;
   }
 
-  const uploadToast = showToast('Uploading entry...', 'info', { persistent: true });
-
-  
   if (!compressedImageBase64) {
     showToast("Photo not ready. Please take photo again.", "error");
     return;
   }
 
+  // ✅ ONLY show toast when really uploading
+  const uploadToast = showToast('Uploading entry...', 'info', { persistent: true });
 
   const rowData = {
-  package: selectedPackage,
-  date: document.getElementById('date').value,
-  volume: document.getElementById('volume').value,
-  waste: document.getElementById('waste').value,
-  token: localStorage.getItem("userToken"), // 🔐 AUTH
-  imageByte: compressedImageBase64.split(",")[1],
-  imageName: `Waste_${Date.now()}.jpg`
-};
-
+    package: selectedPackage,
+    date: document.getElementById('date').value,
+    volume: document.getElementById('volume').value,
+    waste: document.getElementById('waste').value,
+    token: localStorage.getItem("userToken"),
+    imageByte: compressedImageBase64.split(",")[1],
+    imageName: `Waste_${Date.now()}.jpg`
+  };
 
   try {
-       await fetch(scriptURL, {
-          method: "POST",
-          body: JSON.stringify(rowData)
-        });
-        
-        uploadToast.remove();
-        showToast('Entry saved successfully!', 'success');
+    await fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(rowData)
+    });
 
+    uploadToast.remove();
+    showToast('Entry saved successfully!', 'success');
 
-
-   // Reset form
+    // Reset form
     document.getElementById('date').value = '';
     document.getElementById('volume').value = '';
     document.getElementById('waste').value = '';
@@ -273,12 +268,14 @@ async function addEntry() {
     if (placeholder) placeholder.style.display = "block";
 
     document.getElementById('modal').classList.add('active');
+
   } catch (err) {
     uploadToast.remove();
     showToast('Failed to upload entry', 'error');
     console.error(err);
   }
 }
+
 
 function closeModal() {
   document.getElementById('modal').classList.remove('active');
@@ -573,6 +570,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
