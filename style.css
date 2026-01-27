@@ -503,7 +503,18 @@ tr:hover {
 
 .history-actions {
   display: flex;
-  gap: 12px;   /* spacing between buttons */
-  margin-top: 10px;
+  gap: 15px;   /* spacing between buttons */
+  margin-top: 15px;
 }
 
+.history-actions {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+td a.photo-link {
+  color: #2563eb;
+  cursor: pointer;
+  text-decoration: underline;
+}
