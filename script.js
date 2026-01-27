@@ -209,26 +209,34 @@ function validateForm() {
 
 // Add entry
 async function addEntry() {
+
+  if (window.isUploading) return;
+  window.isUploading = true;
+
   
   const token = localStorage.getItem("userToken");
   if (!token) {
     showToast("Session expired. Please log in again.", "error");
     showSection("login-section");
+    window.isUploading = false;
     return;
   }
 
   if (!validateForm()) {
     showToast('Please fill in all required fields', 'error');
+    window.isUploading = false;
     return;
   }
 
   if (!selectedPackage) {
     showToast('No package selected', 'error');
+    window.isUploading = false;
     return;
   }
 
   if (!compressedImageBase64) {
     showToast("Photo not ready. Please take photo again.", "error");
+    window.isUploading = false;
     return;
   }
 
@@ -262,6 +270,8 @@ async function addEntry() {
 
     uploadToast.remove();
     showToast('Entry saved successfully!', 'success');
+    
+    window.isUploading = false;
     submitBtn.disabled = false;
 
     // Reset form
@@ -287,6 +297,7 @@ async function addEntry() {
   } catch (err) {
     uploadToast.remove();
     showToast('Failed to upload entry', 'error');
+    window.isUploading = false;
     submitBtn.disabled = false;
     console.error(err);
   }
@@ -592,6 +603,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
