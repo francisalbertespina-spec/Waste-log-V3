@@ -206,12 +206,10 @@
     </div>
   </div>
 
-  <div id="imageModal" class="modal">
-    <div class="modal-content">
-      <img id="modalImage" src="" style="width:100%; border-radius:10px;">
-      <button class="btn btn-secondary" onclick="closeImageModal()">Close</button>
-    </div>
+  <div id="imageModal" class="image-modal" onclick="closeImageModal()">
+    <img id="modalImage" onclick="event.stopPropagation()">
   </div>
+
 
 
   
@@ -220,6 +218,7 @@
 
 </body>
 </html>
+
 
 
 
