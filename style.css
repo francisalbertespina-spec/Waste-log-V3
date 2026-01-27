@@ -578,20 +578,16 @@ td a.photo-link {
   animation: spin 0.8s linear infinite;
 }
 
-
 .login-loading-ui {
-  display: none;
+  display: none;              /* HIDDEN by default */
   width: 100%;
   min-height: 150px;
 
-  display: flex;
   flex-direction: column;
-  justify-content: center;   /* vertical */
-  align-items: center;       /* horizontal */
+  justify-content: center;    /* vertical */
+  align-items: center;        /* horizontal */
   text-align: center;
 }
-
-
 
 .login-loading-ui p {
   margin-top: 10px;
@@ -602,5 +598,7 @@ td a.photo-link {
 #loginWrapper {
   position: relative;
   width: 100%;
+  display: flex;
+  justify-content: center;    /* center horizontally */
 }
 
