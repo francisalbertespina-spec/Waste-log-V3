@@ -230,6 +230,11 @@ async function addEntry() {
     return;
   }
 
+  
+  // disable button
+  const submitBtn = document.getElementById("submitBtn");
+    submitBtn.disabled = true;
+
   // ✅ ONLY show toast when really uploading
   const uploadToast = showToast('Uploading entry...', 'info', { 
       persistent: true,
@@ -255,6 +260,7 @@ async function addEntry() {
 
     uploadToast.remove();
     showToast('Entry saved successfully!', 'success');
+    submitBtn.disabled = false;
 
     // Reset form
     document.getElementById('date').value = '';
@@ -279,6 +285,7 @@ async function addEntry() {
   } catch (err) {
     uploadToast.remove();
     showToast('Failed to upload entry', 'error');
+    submitBtn.disabled = false;
     console.error(err);
   }
 }
@@ -577,6 +584,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
