@@ -533,7 +533,8 @@ window.onload = function() {
     setTimeout(() => {
       showSection('package-section');
       showToast('Dev mode active - Auth bypassed', 'info');
-    }, 100);
+    }, 0);
+
 
   } else {
     if (window.google && google.accounts && google.accounts.id) {
@@ -585,6 +586,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
