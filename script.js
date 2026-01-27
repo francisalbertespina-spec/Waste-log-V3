@@ -45,7 +45,7 @@ function setLoginLoading(isLoading) {
 
   if (isLoading) {
     btn.style.display = "none";
-    loadingUI.style.display = "block";
+    loadingUI.style.display = "flex";
   } else {
     btn.style.display = "flex";
     loadingUI.style.display = "none";
@@ -524,6 +524,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
