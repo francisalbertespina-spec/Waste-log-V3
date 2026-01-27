@@ -224,75 +224,62 @@ async function addEntry() {
   if (window.isUploading) return;
   window.isUploading = true;
 
-  
-  const token = localStorage.getItem("userToken");
-  if (!token) {
-    showToast("Session expired. Please log in again.", "error");
-    showSection("login-section");
-    window.isUploading = false;
-    submitBtn.disabled = false;
-    return;
-  }
-
-  if (!validateForm()) {
-    showToast('Please fill in all required fields', 'error');
-    window.isUploading = false;
-    return;
-  }
-
-  if (!selectedPackage) {
-    showToast('No package selected', 'error');
-    window.isUploading = false;
-    return;
-  }
-
-  if (!compressedImageBase64) {
-    showToast("Photo not ready. Please take photo again.", "error");
-    window.isUploading = false;
-    return;
-  }
-
-  
-  // disable button
   const submitBtn = document.getElementById("submitBtn");
-    submitBtn.disabled = true;
+  submitBtn.disabled = true;
 
-  // ✅ ONLY show toast when really uploading
-  const uploadToast = showToast('Uploading entry...', 'info', { 
+  let uploadToast;
+
+  try {
+    const token = localStorage.getItem("userToken");
+    if (!token) {
+      showToast("Session expired. Please log in again.", "error");
+      showSection("login-section");
+      return;
+    }
+
+    if (!validateForm()) {
+      showToast('Please fill in all required fields', 'error');
+      return;
+    }
+
+    if (!selectedPackage) {
+      showToast('No package selected', 'error');
+      return;
+    }
+
+    if (!compressedImageBase64) {
+      showToast("Photo not ready. Please take photo again.", "error");
+      return;
+    }
+
+    uploadToast = showToast('Uploading entry...', 'info', { 
       persistent: true,
       spinner: true
     });
 
+    const rowData = {
+      package: selectedPackage,
+      date: document.getElementById('date').value,
+      volume: document.getElementById('volume').value,
+      waste: document.getElementById('waste').value,
+      token: localStorage.getItem("userToken"),
+      imageByte: compressedImageBase64.split(",")[1],
+      imageName: `Waste_${Date.now()}.jpg`
+    };
 
-  const rowData = {
-    package: selectedPackage,
-    date: document.getElementById('date').value,
-    volume: document.getElementById('volume').value,
-    waste: document.getElementById('waste').value,
-    token: localStorage.getItem("userToken"),
-    imageByte: compressedImageBase64.split(",")[1],
-    imageName: `Waste_${Date.now()}.jpg`
-  };
+    const slowTimer = setTimeout(() => {
+      showToast("Still uploading… please wait", "info");
+    }, 8000);
 
-  try {
-       // Show slow warning if takes too long
-      const slowTimer = setTimeout(() => {
-        showToast("Still uploading… please wait", "info");
-      }, 8000); // 8 seconds
-      
-      await fetchWithTimeout(scriptURL, {
-        method: "POST",
-        body: JSON.stringify(rowData)
-      }, 30000);
-      
-      clearTimeout(slowTimer);
+    await fetchWithTimeout(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(rowData)
+    }, 30000);
 
+    clearTimeout(slowTimer);
 
     uploadToast.remove();
     showToast('Entry saved successfully!', 'success');
-    
-    window.isUploading = false;
-    submitBtn.disabled = false;
 
     // Reset form
     document.getElementById('date').value = '';
@@ -315,17 +302,19 @@ async function addEntry() {
     document.getElementById('modal').classList.add('active');
 
   } catch (err) {
-  uploadToast.remove();
-  window.isUploading = false;
-  submitBtn.disabled = false;
+    if (uploadToast) uploadToast.remove();
 
-  if (err.message === "Upload timeout") {
-    showToast("Upload timed out. Please try again.", "error");
-  } else {
-    showToast("Failed to upload entry", "error");
-  }
+    if (err.message === "Upload timeout") {
+      showToast("Upload timed out. Please try again.", "error");
+    } else {
+      showToast("Failed to upload entry", "error");
+    }
 
-  console.error(err);
+    console.error(err);
+
+  } finally {
+    window.isUploading = false;
+    submitBtn.disabled = false;
   }
 }
 
@@ -629,6 +618,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
