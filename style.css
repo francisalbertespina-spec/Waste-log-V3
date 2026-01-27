@@ -400,6 +400,26 @@ tr:hover {
   background: #f9f9f9;
 }
 
+/* Date, kg, Waste = columns 1,2,3 */
+th:nth-child(1),
+th:nth-child(2),
+th:nth-child(3),
+td:nth-child(1),
+td:nth-child(2),
+td:nth-child(3) {
+  padding: 8px 6px;
+  font-size: 0.85rem;
+}
+
+/* Keep user + photo more spacious */
+th:nth-child(4),
+td:nth-child(4),
+th:nth-child(5),
+td:nth-child(5) {
+  padding: 12px 10px;
+}
+
+
 /* User (email) column */
 th:nth-child(4),
 td:nth-child(4) {
