@@ -230,6 +230,7 @@ async function addEntry() {
     showToast("Session expired. Please log in again.", "error");
     showSection("login-section");
     window.isUploading = false;
+    submitBtn.disabled = false;
     return;
   }
 
@@ -628,6 +629,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
