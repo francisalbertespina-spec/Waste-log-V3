@@ -520,7 +520,7 @@ window.onload = function() {
       google.accounts.id.initialize({
         client_id: "648943267004-cgsr4bhegtmma2jmlsekjtt494j8cl7f.apps.googleusercontent.com",
         callback: handleCredentialResponse,
-        auto_seclect: false,
+        auto_select: false,
         cancel_on_tap_outside: true
       });
 
@@ -565,6 +565,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
