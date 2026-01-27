@@ -572,8 +572,6 @@ td a.photo-link {
 #loginWrapper {
   position: relative;
   width: 100%;
-  display: flex;
-  justify-content: center;    /* center horizontally */
 }
 
 .login-spinner {
@@ -586,16 +584,17 @@ td a.photo-link {
 }
 
 .login-loading-ui {
-  display: none;   /* hidden by default */
+  display: none;
   width: 100%;
   min-height: 150px;
 
-  display: flex;              /* ALWAYS flex */
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
 }
+
 
 
 .login-loading-ui p {
