@@ -29,15 +29,15 @@ function showToast(message, type = 'info', options = {}) {
   toast.className = `toast ${type}`;
 
   // Spinner HTML (only if requested)
-  const spinnerHTML = options.spinner
+ const spinnerHTML = options.spinner
     ? `<div class="toast-icon"><div class="toast-spinner"></div></div>`
     : `<div class="toast-icon">${icons[type]}</div>`;
-
-
+  
   toast.innerHTML = `
     ${spinnerHTML}
-    <div>${message}</div>
+    <div class="toast-message">${message}</div>
   `;
+
 
   document.body.appendChild(toast);
 
@@ -592,6 +592,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
