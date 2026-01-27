@@ -1,6 +1,8 @@
 let loadedRows = [];
 let selectedPackage = "";
 let compressedImageBase64 = "";
+window.isUploading = false;
+
 
 const DEV_MODE = false; // Set to false for production
 
@@ -636,6 +638,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
