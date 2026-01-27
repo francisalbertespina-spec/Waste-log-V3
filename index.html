@@ -177,6 +177,7 @@
                 <th>kg</th>
                 <th>Waste</th>
                 <th>User</th>
+                <th>Photo</th>
               </tr>
             </thead>
             <tbody id="table-body"></tbody>
@@ -205,12 +206,21 @@
     </div>
   </div>
 
+  <div id="imageModal" class="modal">
+    <div class="modal-content">
+      <img id="modalImage" src="" style="width:100%; border-radius:10px;">
+      <button class="btn btn-secondary" onclick="closeImageModal()">Close</button>
+    </div>
+  </div>
+
+
   
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="script.js"></script>
 
 </body>
 </html>
+
 
 
 
