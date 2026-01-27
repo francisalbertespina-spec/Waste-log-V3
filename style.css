@@ -581,4 +581,5 @@ td a.photo-link {
   transform: translate(-50%, -50%);
   animation: spin 0.8s linear infinite;
   z-index: 10;
+  pointer-events: none; /* 👈 IMPORTANT */
 }
