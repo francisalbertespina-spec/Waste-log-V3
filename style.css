@@ -546,11 +546,6 @@ td:nth-child(5) {
   margin-top: 15px;
 }
 
-.history-actions {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 15px;
-}
 
 .image-modal {
   display: none;
