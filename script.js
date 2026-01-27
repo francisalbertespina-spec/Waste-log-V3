@@ -180,17 +180,17 @@ function validateForm() {
   const date = document.getElementById("date").value;
   const volume = document.getElementById("volume").value;
   const waste = document.getElementById("waste").value;
-  const hasImage = document
-    .querySelector(".photo-upload")
-    .classList.contains("has-image");
 
   if (!date) return false;
   if (!volume) return false;
   if (!waste) return false;
-  if (!hasImage) return false;
+
+  // ✅ NEW: validate using compressed image, not UI class
+  if (!compressedImageBase64) return false;
 
   return true;
 }
+
 
 
 
@@ -565,6 +565,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
