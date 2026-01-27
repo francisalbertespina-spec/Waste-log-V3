@@ -192,8 +192,6 @@ function validateForm() {
 }
 
 
-
-
 // Add entry
 async function addEntry() {
   
@@ -217,8 +215,6 @@ async function addEntry() {
 
   showToast('Uploading entry...', 'info');
 
-  const photoInput = document.getElementById("photo");
-  const file = photoInput.files[0];
   
   if (!compressedImageBase64) {
     showToast("Photo not ready. Please take photo again.", "error");
@@ -254,7 +250,8 @@ async function addEntry() {
     document.getElementById('waste').value = '';
 
     const photoInput = document.getElementById("photo");
-    photoInput.value = '';
+    photoInput.value = null;
+    compressedImageBase64 = "";
 
     const uploadDiv = document.querySelector('.photo-upload');
     uploadDiv.classList.remove('has-image');
