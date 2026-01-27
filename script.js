@@ -474,7 +474,7 @@ function openImageModal(url) {
   const modal = document.getElementById("imageModal");
   const img = document.getElementById("modalImage");
 
-  // Extract file ID safely from ANY Drive link
+  // Extract file ID from any Drive link
   const match = url.match(/[-\w]{25,}/);
   if (!match) {
     showToast("Invalid image link", "error");
@@ -483,8 +483,8 @@ function openImageModal(url) {
 
   const fileId = match[0];
 
-  // Use VIEW (not download)
-  const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+  // Thumbnail URL (Drive allows this)
+  const directUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
 
   img.src = directUrl;
   modal.style.display = "flex";
@@ -499,6 +499,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
