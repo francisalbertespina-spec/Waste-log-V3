@@ -524,16 +524,18 @@ async function handleCredentialResponse(response) {
 
 // Initialize
 window.onload = function() {
-  if (DEV_MODE) {
+    if (DEV_MODE) {
     console.warn('⚠️ DEV MODE ENABLED');
-
-    // 🔐 Simulate a valid session token (must exist in Users sheet as Approved)
+  
     localStorage.setItem("userToken", "DEV_TOKEN");
-
-    setTimeout(() => {
-      showSection('package-section');
-      showToast('Dev mode active - Auth bypassed', 'info');
-    }, 0);
+  
+    // Force hide login + show packages
+    document.querySelectorAll('.section')
+      .forEach(s => s.classList.remove('active'));
+  
+    document.getElementById('package-section').classList.add('active');
+  
+    showToast('Dev mode active - Auth bypassed', 'info');
 
 
   } else {
@@ -586,29 +588,6 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
