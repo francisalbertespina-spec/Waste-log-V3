@@ -2,9 +2,12 @@ const DEV_MODE = false; // Set to false for production
 
 const scriptURL = "https://script.google.com/macros/s/AKfycbwpSUI8zSMeNiDLoLdqNRWmJuOw3HIRR2Txev_YXnX782TW6zcL0yXeJglCiJ9qLmA/exec";
 
+// Waste-Log-Auth-V2
 // working script = Deployment HWTR-1
 // const scriptURL = "https://script.google.com/macros/s/AKfycbylJMo7GXUndNLUjxvCfUu1pQ0UpQH0OL9MeG71a0zyVFZ0wQ41RGoYKVhC8HFdhJZQBQ/exec";
 
+
+// Waste-Log-Auth-V1
 // working script = Deployment 1-26-2026-rev6
 // const scriptURL = "https://script.google.com/macros/s/AKfycbwyAIPb1OXyEWjau0-3OM4_e5FWLr-wuBHTx0otEzPABLomL5FRi4BsPs39bF1VfClA/exec";
 
@@ -562,6 +565,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
