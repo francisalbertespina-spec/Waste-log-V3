@@ -474,9 +474,22 @@ function openImageModal(url) {
   const modal = document.getElementById("imageModal");
   const img = document.getElementById("modalImage");
 
-  img.src = url;
+  // Extract file ID from Drive link
+  const match = url.match(/\/d\/([^/]+)/);
+  if (!match) {
+    showToast("Invalid image link", "error");
+    return;
+  }
+
+  const fileId = match[1];
+
+  // Build direct image URL
+  const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+
+  img.src = directUrl;
   modal.style.display = "flex";
 }
+
 
 function closeImageModal() {
   const modal = document.getElementById("imageModal");
@@ -485,6 +498,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
