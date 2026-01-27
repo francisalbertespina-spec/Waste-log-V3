@@ -234,6 +234,7 @@ async function addEntry() {
   submitBtn.disabled = true;
 
   let uploadToast;
+  let slowTimer;
 
   try {
     const token = localStorage.getItem("userToken");
@@ -244,12 +245,12 @@ async function addEntry() {
     }
 
     if (!validateForm()) {
-      showToast('Please fill in all required fields', 'error');
+      showToast("Please fill in all required fields", "error");
       return;
     }
 
     if (!selectedPackage) {
-      showToast('No package selected', 'error');
+      showToast("No package selected", "error");
       return;
     }
 
@@ -258,62 +259,71 @@ async function addEntry() {
       return;
     }
 
-    uploadToast = showToast('Uploading entry...', 'info', { 
+    uploadToast = showToast("Uploading entry...", "info", { 
       persistent: true,
       spinner: true
     });
 
     const rowData = {
       package: selectedPackage,
-      date: document.getElementById('date').value,
-      volume: document.getElementById('volume').value,
-      waste: document.getElementById('waste').value,
-      token: localStorage.getItem("userToken"),
+      date: document.getElementById("date").value,
+      volume: document.getElementById("volume").value,
+      waste: document.getElementById("waste").value,
+      token: token,
       imageByte: compressedImageBase64.split(",")[1],
       imageName: `Waste_${Date.now()}.jpg`
     };
 
-    const slowTimer = setTimeout(() => {
+    // Slow warning
+    slowTimer = setTimeout(() => {
       showToast("Still uploading… please wait", "info");
     }, 8000);
 
-    await fetchWithTimeout(scriptURL, {
+    const res = await fetchWithTimeout(scriptURL, {
       method: "POST",
       body: JSON.stringify(rowData)
     }, 30000);
 
     clearTimeout(slowTimer);
 
+    const result = await res.json();
+
+    // 🔐 backend-trusted error handling
+    if (!res.ok || result.error) {
+      throw new Error(result.error || "Server error");
+    }
+
     uploadToast.remove();
-    showToast('Entry saved successfully!', 'success');
+    showToast("Entry saved successfully!", "success");
 
     // Reset form
-    document.getElementById('date').value = '';
-    document.getElementById('volume').value = '';
-    document.getElementById('waste').value = '';
+    document.getElementById("date").value = "";
+    document.getElementById("volume").value = "";
+    document.getElementById("waste").value = "";
 
     const photoInput = document.getElementById("photo");
     photoInput.value = null;
     compressedImageBase64 = "";
 
-    const uploadDiv = document.querySelector('.photo-upload');
-    uploadDiv.classList.remove('has-image');
+    const uploadDiv = document.querySelector(".photo-upload");
+    uploadDiv.classList.remove("has-image");
 
     const img = uploadDiv.querySelector("img");
     if (img) img.remove();
 
-    const placeholder = uploadDiv.querySelector('.placeholder');
+    const placeholder = uploadDiv.querySelector(".placeholder");
     if (placeholder) placeholder.style.display = "block";
 
-    document.getElementById('modal').classList.add('active');
+    document.getElementById("modal").classList.add("active");
 
   } catch (err) {
     if (uploadToast) uploadToast.remove();
+    if (slowTimer) clearTimeout(slowTimer);
 
     if (err.message === "Upload timeout") {
       showToast("Upload timed out. Please try again.", "error");
     } else {
-      showToast("Failed to upload entry", "error");
+      showToast(err.message || "Failed to upload entry", "error");
     }
 
     console.error(err);
@@ -323,6 +333,8 @@ async function addEntry() {
     submitBtn.disabled = false;
   }
 }
+
+
 
 
 function closeModal() {
@@ -624,6 +636,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
