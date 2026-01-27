@@ -425,7 +425,7 @@ function parseJwt(token) {
 
 // Google login handler
 async function handleCredentialResponse(response) {
-  setLoginLoading(true);
+  setLoginLoading(false);
 
   const responsePayload = parseJwt(response.credential);
   const email = responsePayload.email.toLowerCase();
@@ -526,6 +526,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
