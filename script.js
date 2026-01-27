@@ -207,6 +207,17 @@ function validateForm() {
 }
 
 
+// Timeout Helper
+function fetchWithTimeout(resource, options = {}, timeout = 30000) {
+  return Promise.race([
+    fetch(resource, options),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Upload timeout")), timeout)
+    )
+  ]);
+}
+
+
 // Add entry
 async function addEntry() {
 
@@ -263,10 +274,18 @@ async function addEntry() {
   };
 
   try {
-    await fetch(scriptURL, {
-      method: "POST",
-      body: JSON.stringify(rowData)
-    });
+       // Show slow warning if takes too long
+      const slowTimer = setTimeout(() => {
+        showToast("Still uploading… please wait", "info");
+      }, 8000); // 8 seconds
+      
+      await fetchWithTimeout(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(rowData)
+      }, 30000);
+      
+      clearTimeout(slowTimer);
+
 
     uploadToast.remove();
     showToast('Entry saved successfully!', 'success');
@@ -295,11 +314,17 @@ async function addEntry() {
     document.getElementById('modal').classList.add('active');
 
   } catch (err) {
-    uploadToast.remove();
-    showToast('Failed to upload entry', 'error');
-    window.isUploading = false;
-    submitBtn.disabled = false;
-    console.error(err);
+  uploadToast.remove();
+  window.isUploading = false;
+  submitBtn.disabled = false;
+
+  if (err.message === "Upload timeout") {
+    showToast("Upload timed out. Please try again.", "error");
+  } else {
+    showToast("Failed to upload entry", "error");
+  }
+
+  console.error(err);
   }
 }
 
@@ -603,6 +628,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
