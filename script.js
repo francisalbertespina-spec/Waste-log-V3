@@ -426,8 +426,7 @@ function parseJwt(token) {
 
 // Google login handler
 async function handleCredentialResponse(response) {
-  setLoginLoading(true); // 🔒 lock button
-  showToast('Checking authorization...', 'info');
+  setLoginLoading(true);
 
   const responsePayload = parseJwt(response.credential);
   const email = responsePayload.email.toLowerCase();
@@ -439,22 +438,28 @@ async function handleCredentialResponse(response) {
 
     if (data.status === "Approved") {
       localStorage.setItem("userToken", data.token);
-      showSection('package-section');
-      showToast(`Welcome, ${responsePayload.name}!`, 'success');
-    } else if (data.status === "Rejected") {
-      showToast('Access denied by admin', 'error');
-      setLoginLoading(false); // 🔓 allow retry
-    } else {
-      showToast('Awaiting admin approval', 'error');
-      setLoginLoading(false); // 🔓 allow retry
+
+      setLoginLoading(false);     // 👈 STOP SPINNER FIRST
+      showSection("package-section"); // 👈 THEN SHOW PACKAGE
+
+      showToast(`Welcome, ${responsePayload.name}!`, "success");
+    } 
+    else if (data.status === "Rejected") {
+      setLoginLoading(false);
+      showToast("Access denied by admin", "error");
+    } 
+    else {
+      setLoginLoading(false);
+      showToast("Awaiting admin approval", "info");
     }
 
   } catch (err) {
     console.error(err);
-    showToast('Connection error. Please try again.', 'error');
-    setLoginLoading(false); // 🔓 allow retry
+    setLoginLoading(false);
+    showToast("Connection error", "error");
   }
 }
+
 
 
 
@@ -520,6 +525,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
