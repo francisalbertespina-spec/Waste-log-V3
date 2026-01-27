@@ -376,27 +376,37 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  table-layout: fixed; /* KEY FIX */
 }
 
+th, td {
+  padding: 8px;
+  border-bottom: 1px solid #f0f0f0;
+  word-wrap: break-word;
+  text-align: center;
+}
+
+/* Header */
 th {
   background: #fafafa;
-  padding: 15px 12px;
-  text-align: left;
   font-weight: 700;
   color: #555;
   border-bottom: 2px solid #e0e0e0;
 }
 
-td {
-  padding: 15px 12px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
+/* Hover */
 tr:hover {
   background: #f9f9f9;
 }
 
+/* Photo column width */
+th:nth-child(5),
+td:nth-child(5) {
+  width: 70px;
+}
+
+/* Empty state */
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -408,6 +418,7 @@ tr:hover {
   margin-bottom: 15px;
   opacity: 0.3;
 }
+
 
 /* Date Range */
 .date-range {
@@ -534,3 +545,5 @@ td a.photo-link {
   cursor: pointer;
   text-decoration: underline;
 }
+
+
