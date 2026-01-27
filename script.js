@@ -34,19 +34,17 @@ function showToast(message, type = 'info', options = {}) {
 
   document.body.appendChild(toast);
 
-  // Persistent toast (no auto-remove)
-  if (options.persistent) {
-    return toast; // return reference so we can remove it later
+  // If NOT persistent → auto remove after 3s
+  if (!options.persistent) {
+    setTimeout(() => {
+      toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
   }
 
-  // Auto-remove toast
-  setTimeout(() => {
-    toast.style.animation = 'slideInRight 0.3s ease-out reverse';
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
-
-  return toast;
+  return toast; // 👈 IMPORTANT: lets us remove it manually
 }
+
 
 
 
@@ -575,6 +573,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
