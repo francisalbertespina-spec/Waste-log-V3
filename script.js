@@ -4,7 +4,13 @@ let compressedImageBase64 = "";
 
 const DEV_MODE = false; // Set to false for production
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbwpSUI8zSMeNiDLoLdqNRWmJuOw3HIRR2Txev_YXnX782TW6zcL0yXeJglCiJ9qLmA/exec";
+
+const scriptURL = "https://script.google.com/macros/s/AKfycbwNru_w4Hkg8_3yg8MyOUBqERxBdE4eUuVxiHsfy5w0Mv_whcgnstRpCgCMgKS_fimy/exec";
+
+
+// Waste-Log-Auth-V3
+// Working script = Deployement V3-rev1
+// const scriptURL = "https://script.google.com/macros/s/AKfycbwpSUI8zSMeNiDLoLdqNRWmJuOw3HIRR2Txev_YXnX782TW6zcL0yXeJglCiJ9qLmA/exec";
 
 
 // Waste-Log-Auth-V2
@@ -618,6 +624,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
