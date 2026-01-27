@@ -1,6 +1,11 @@
+let loadedRows = [];
+let selectedPackage = "";
+let compressedImageBase64 = "";
+
 const DEV_MODE = false; // Set to false for production
 
 const scriptURL = "https://script.google.com/macros/s/AKfycbwpSUI8zSMeNiDLoLdqNRWmJuOw3HIRR2Txev_YXnX782TW6zcL0yXeJglCiJ9qLmA/exec";
+
 
 // Waste-Log-Auth-V2
 // working script = Deployment HWTR-1
@@ -11,9 +16,6 @@ const scriptURL = "https://script.google.com/macros/s/AKfycbwpSUI8zSMeNiDLoLdqNR
 // working script = Deployment 1-26-2026-rev6
 // const scriptURL = "https://script.google.com/macros/s/AKfycbwyAIPb1OXyEWjau0-3OM4_e5FWLr-wuBHTx0otEzPABLomL5FRi4BsPs39bF1VfClA/exec";
 
-
-let loadedRows = [];
-let selectedPackage = "";
 
 // Toast notification system
 function showToast(message, type = 'info') {
@@ -147,8 +149,6 @@ function compressImage(file) {
 }
 
 // Image preview
-let compressedImageBase64 = ""; // global
-
 async function previewImage(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -565,6 +565,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
