@@ -231,7 +231,11 @@ async function addEntry() {
   }
 
   // ✅ ONLY show toast when really uploading
-  const uploadToast = showToast('Uploading entry...', 'info', { persistent: true });
+  const uploadToast = showToast('Uploading entry...', 'info', { 
+      persistent: true,
+      spinner: true
+    });
+
 
   const rowData = {
     package: selectedPackage,
@@ -573,6 +577,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
