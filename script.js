@@ -18,27 +18,36 @@ const scriptURL = "https://script.google.com/macros/s/AKfycbwpSUI8zSMeNiDLoLdqNR
 
 
 // Toast notification system
-function showToast(message, type = 'info') {
+function showToast(message, type = 'info', options = {}) {
   const icons = { 
     success: '✅', 
     error: '❌', 
     info: 'ℹ️' 
   };
-  
+
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   toast.innerHTML = `
     <div class="icon">${icons[type]}</div>
     <div>${message}</div>
   `;
-  
+
   document.body.appendChild(toast);
-  
+
+  // Persistent toast (no auto-remove)
+  if (options.persistent) {
+    return toast; // return reference so we can remove it later
+  }
+
+  // Auto-remove toast
   setTimeout(() => {
     toast.style.animation = 'slideInRight 0.3s ease-out reverse';
     setTimeout(() => toast.remove(), 300);
   }, 3000);
+
+  return toast;
 }
+
 
 
 
@@ -216,7 +225,7 @@ async function addEntry() {
     return;
   }
 
-  showToast('Uploading entry...', 'info');
+  const uploadToast = showToast('Uploading entry...', 'info', { persistent: true });
 
   
   if (!compressedImageBase64) {
@@ -238,13 +247,13 @@ async function addEntry() {
 
   try {
        await fetch(scriptURL, {
-    method: "POST",
-    body: JSON.stringify(rowData)
-  });
+          method: "POST",
+          body: JSON.stringify(rowData)
+        });
+        
+        uploadToast.remove();
+        showToast('Entry saved successfully!', 'success');
 
-
-
-    showToast('Entry saved successfully!', 'success');
 
 
    // Reset form
@@ -267,6 +276,7 @@ async function addEntry() {
 
     document.getElementById('modal').classList.add('active');
   } catch (err) {
+    uploadToast.remove();
     showToast('Failed to upload entry', 'error');
     console.error(err);
   }
@@ -565,6 +575,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
