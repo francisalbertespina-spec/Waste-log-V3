@@ -569,6 +569,13 @@ td a.photo-link {
   text-decoration: underline;
 }
 
+#loginWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;    /* center horizontally */
+}
+
 .login-spinner {
   width: 28px;
   height: 28px;
@@ -595,10 +602,5 @@ td a.photo-link {
   font-weight: 500;
 }
 
-#loginWrapper {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;    /* center horizontally */
-}
+
 
