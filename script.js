@@ -524,39 +524,43 @@ async function handleCredentialResponse(response) {
 
 // Initialize
 window.onload = function() {
-    if (DEV_MODE) {
+
+  if (DEV_MODE) {
     console.warn('⚠️ DEV MODE ENABLED');
-  
+
+    // Fake valid session
     localStorage.setItem("userToken", "DEV_TOKEN");
-  
-    // Force hide login + show packages
+
+    // Force UI state
     document.querySelectorAll('.section')
       .forEach(s => s.classList.remove('active'));
-  
+
     document.getElementById('package-section').classList.add('active');
-  
+
     showToast('Dev mode active - Auth bypassed', 'info');
 
+    return; // ⛔ STOP here, do NOT run Google code
+  }
 
+  // NORMAL MODE (Google Sign-In)
+  if (window.google && google.accounts && google.accounts.id) {
+    google.accounts.id.initialize({
+      client_id: "648943267004-cgsr4bhegtmma2jmlsekjtt494j8cl7f.apps.googleusercontent.com",
+      callback: handleCredentialResponse,
+      auto_select: false,
+      cancel_on_tap_outside: true
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById("buttonDiv"),
+      { theme: "outline", size: "large", width: "250" }
+    );
   } else {
-    if (window.google && google.accounts && google.accounts.id) {
-      google.accounts.id.initialize({
-        client_id: "648943267004-cgsr4bhegtmma2jmlsekjtt494j8cl7f.apps.googleusercontent.com",
-        callback: handleCredentialResponse,
-        auto_select: false,
-        cancel_on_tap_outside: true
-      });
-
-      google.accounts.id.renderButton(
-        document.getElementById("buttonDiv"),
-        { theme: "outline", size: "large", width: "250" }
-      );
-    } else {
-      console.error("Google Identity not loaded");
-      showToast('Login service unavailable', 'error');
-    }
+    console.error("Google Identity not loaded");
+    showToast('Login service unavailable', 'error');
   }
 };
+
 
 // modal function
 function openImageModal(url) {
@@ -580,7 +584,6 @@ function openImageModal(url) {
 }
 
 
-
 function closeImageModal() {
   const modal = document.getElementById("imageModal");
   const img = document.getElementById("modalImage");
@@ -588,6 +591,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
