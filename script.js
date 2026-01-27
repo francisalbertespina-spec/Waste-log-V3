@@ -35,6 +35,22 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
+
+
+function setLoginLoading(isLoading) {
+  const btn = document.getElementById("buttonDiv");
+  if (!btn) return;
+
+  if (isLoading) {
+    btn.style.pointerEvents = "none";
+    btn.style.opacity = "0.6";
+  } else {
+    btn.style.pointerEvents = "auto";
+    btn.style.opacity = "1";
+  }
+}
+
+
 // Section management
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -500,6 +516,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
