@@ -104,8 +104,49 @@ function showHistoryView() {
   document.getElementById('fromDate').valueAsDate = weekAgo;
 }
 
+// Image Compression
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onload = e => {
+      img.src = e.target.result;
+    };
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const MAX_WIDTH = 1024;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > MAX_WIDTH) {
+        height = height * (MAX_WIDTH / width);
+        width = MAX_WIDTH;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+      resolve(compressedBase64);
+    };
+
+    img.onerror = reject;
+    reader.onerror = reject;
+
+    reader.readAsDataURL(file);
+  });
+}
+
 // Image preview
-function previewImage(event) {
+let compressedImageBase64 = ""; // global
+
+async function previewImage(event) {
   const file = event.target.files[0];
   if (!file) return;
 
@@ -119,14 +160,18 @@ function previewImage(event) {
     uploadDiv.appendChild(img);
   }
 
-  const reader = new FileReader();
-  reader.onload = e => img.src = e.target.result;
-  reader.readAsDataURL(file);
+  // 🔥 COMPRESS HERE
+  const compressedBase64 = await compressImage(file);
+
+  // Save for upload later
+  compressedImageBase64 = compressedBase64;
+
+  // Preview compressed image
+  img.src = compressedBase64;
 
   uploadDiv.classList.add("has-image");
   if (placeholder) placeholder.style.display = "none";
 }
-
 
 
 
@@ -174,16 +219,12 @@ async function addEntry() {
 
   const photoInput = document.getElementById("photo");
   const file = photoInput.files[0];
-
-  let fileData = null;
-
-  if (file) {
-    fileData = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target.result.split(",")[1]);
-      reader.readAsDataURL(file);
-    });
+  
+  if (!compressedImageBase64) {
+    showToast("Photo not ready. Please take photo again.", "error");
+    return;
   }
+
 
   const rowData = {
   package: selectedPackage,
@@ -191,8 +232,8 @@ async function addEntry() {
   volume: document.getElementById('volume').value,
   waste: document.getElementById('waste').value,
   token: localStorage.getItem("userToken"), // 🔐 AUTH
-  imageByte: fileData,
-  imageName: `Waste_${Date.now()}.png`
+  imageByte: compressedImageBase64.split(",")[1],
+  imageName: `Waste_${Date.now()}.jpg`
 };
 
 
@@ -524,6 +565,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
