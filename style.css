@@ -583,3 +583,19 @@ td a.photo-link {
   z-index: 10;
   pointer-events: none; /* 👈 IMPORTANT */
 }
+
+.login-loading-ui {
+  display: none;
+  height: 150px;              /* gives space to center */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* vertical */
+  align-items: center;       /* horizontal */
+  text-align: center;
+}
+
+.login-loading-ui p {
+  margin-top: 10px;
+  color: #666;
+  font-weight: 500;
+}
