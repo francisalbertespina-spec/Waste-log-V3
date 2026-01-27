@@ -599,3 +599,9 @@ td a.photo-link {
   color: #666;
   font-weight: 500;
 }
+
+#loginWrapper {
+  min-height: 120px;
+  position: relative;
+}
+
