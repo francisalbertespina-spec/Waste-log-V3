@@ -283,9 +283,18 @@ async function loadHistory() {
 
       const imgUrl = convertDriveLink(r[5]);
 
-      const photoLink = r[5]
-        ? `<a class="photo-link" onclick="openImageModal('${imgUrl}')">View</a>`
+      let imageUrl = "";
+      if (r[5]) {
+        const match = r[5].match(/\/d\/([^/]+)/);
+        if (match) {
+          imageUrl = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+        }
+      }
+      
+      const photoLink = imageUrl
+        ? `<a class="photo-link" onclick="openImageModal('${imageUrl}')">View</a>`
         : '—';
+
 
 
       const tr = document.createElement("tr");
@@ -476,6 +485,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
