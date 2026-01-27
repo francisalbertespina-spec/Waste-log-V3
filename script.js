@@ -406,19 +406,16 @@ function parseJwt(token) {
 
 // Google login handler
 async function handleCredentialResponse(response) {
+  setLoginLoading(true); // 🔒 lock button
+  showToast('Checking authorization...', 'info');
+
   const responsePayload = parseJwt(response.credential);
   const email = responsePayload.email.toLowerCase();
-
-  console.log("LOGIN EMAIL:", email);
-
-  showToast('Checking authorization...', 'info');
 
   try {
     const checkURL = `${scriptURL}?email=${encodeURIComponent(email)}`;
     const res = await fetch(checkURL);
-    const data = await res.json();   // 👈 define data first
-
-    console.log("BACKEND RESPONSE:", data); // ✅ now safe
+    const data = await res.json();
 
     if (data.status === "Approved") {
       localStorage.setItem("userToken", data.token);
@@ -426,15 +423,19 @@ async function handleCredentialResponse(response) {
       showToast(`Welcome, ${responsePayload.name}!`, 'success');
     } else if (data.status === "Rejected") {
       showToast('Access denied by admin', 'error');
+      setLoginLoading(false); // 🔓 allow retry
     } else {
       showToast('Awaiting admin approval', 'error');
+      setLoginLoading(false); // 🔓 allow retry
     }
 
   } catch (err) {
     console.error(err);
     showToast('Connection error. Please try again.', 'error');
+    setLoginLoading(false); // 🔓 allow retry
   }
 }
+
 
 
 
@@ -499,6 +500,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
