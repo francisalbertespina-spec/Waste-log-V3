@@ -266,7 +266,6 @@ async function addEntry() {
   const submitBtn = document.getElementById("submitBtn");
   submitBtn.disabled = true;
 
-  let uploadToast;
   let slowTimer;
 
   try {
@@ -292,7 +291,8 @@ async function addEntry() {
       return;
     }
 
-    uploadToast = showToast("Uploading entry...", "info", { 
+    // 🔔 show persistent spinner toast
+    showToast("Uploading entry...", "info", { 
       persistent: true,
       spinner: true
     });
@@ -301,7 +301,6 @@ async function addEntry() {
       pendingRequestId = crypto.randomUUID();
     }
 
-    
     const rowData = {
       requestId: pendingRequestId,
       package: selectedPackage,
@@ -323,52 +322,29 @@ async function addEntry() {
       body: JSON.stringify(rowData)
     }, 30000);
 
-
     clearTimeout(slowTimer);
 
     const result = await res.json();
 
-    // 🔐 backend-trusted error handling
+    // 🛑 Duplicate request
     if (result.error === "Duplicate request") {
-      uploadToast.remove();
+      if (activeToast) dismissToast(activeToast);
       showToast("Entry already saved.", "success");
       resetFormAfterSuccess();
       return;
     }
 
-
     if (!res.ok || result.error) {
       throw new Error(result.error || "Server error");
     }
-    
-    uploadToast.remove();
+
+    // ✅ success
+    if (activeToast) dismissToast(activeToast);
     showToast("Entry saved successfully!", "success");
     resetFormAfterSuccess();
 
-
-
-    // Reset form
-    document.getElementById("date").value = "";
-    document.getElementById("volume").value = "";
-    document.getElementById("waste").value = "";
-
-    const photoInput = document.getElementById("photo");
-    photoInput.value = null;
-    compressedImageBase64 = "";
-
-    const uploadDiv = document.querySelector(".photo-upload");
-    uploadDiv.classList.remove("has-image");
-
-    const img = uploadDiv.querySelector("img");
-    if (img) img.remove();
-
-    const placeholder = uploadDiv.querySelector(".placeholder");
-    if (placeholder) placeholder.style.display = "block";
-
-    document.getElementById("modal").classList.add("active");
-
   } catch (err) {
-    if (uploadToast) uploadToast.remove();
+    if (activeToast) dismissToast(activeToast);
     if (slowTimer) clearTimeout(slowTimer);
 
     if (err.message === "Upload timeout") {
@@ -386,30 +362,6 @@ async function addEntry() {
   }
 }
 
-
-// Resets form aftersuccesss
-function resetFormAfterSuccess() {
-  pendingRequestId = null;
-
-  document.getElementById("date").value = "";
-  document.getElementById("volume").value = "";
-  document.getElementById("waste").value = "";
-
-  const photoInput = document.getElementById("photo");
-  photoInput.value = null;
-  compressedImageBase64 = "";
-
-  const uploadDiv = document.querySelector(".photo-upload");
-  uploadDiv.classList.remove("has-image");
-
-  const img = uploadDiv.querySelector("img");
-  if (img) img.remove();
-
-  const placeholder = uploadDiv.querySelector(".placeholder");
-  if (placeholder) placeholder.style.display = "block";
-
-  document.getElementById("modal").classList.add("active");
-}
 
 
 
@@ -713,6 +665,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
