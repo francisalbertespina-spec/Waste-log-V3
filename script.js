@@ -302,18 +302,19 @@ async function addEntry() {
     if (result.error === "Duplicate request") {
       uploadToast.remove();
       showToast("Entry already saved.", "success");
-      pendingRequestId = null;
+      resetFormAfterSuccess();
       return;
     }
+
 
     if (!res.ok || result.error) {
       throw new Error(result.error || "Server error");
     }
-
-
+    
     uploadToast.remove();
     showToast("Entry saved successfully!", "success");
-    pendingRequestId = null;
+    resetFormAfterSuccess();
+
 
 
     // Reset form
@@ -353,6 +354,31 @@ async function addEntry() {
     submitBtn.disabled = false;
     if (slowTimer) clearTimeout(slowTimer);
   }
+}
+
+
+// Resets form aftersuccesss
+function resetFormAfterSuccess() {
+  pendingRequestId = null;
+
+  document.getElementById("date").value = "";
+  document.getElementById("volume").value = "";
+  document.getElementById("waste").value = "";
+
+  const photoInput = document.getElementById("photo");
+  photoInput.value = null;
+  compressedImageBase64 = "";
+
+  const uploadDiv = document.querySelector(".photo-upload");
+  uploadDiv.classList.remove("has-image");
+
+  const img = uploadDiv.querySelector("img");
+  if (img) img.remove();
+
+  const placeholder = uploadDiv.querySelector(".placeholder");
+  if (placeholder) placeholder.style.display = "block";
+
+  document.getElementById("modal").classList.add("active");
 }
 
 
@@ -657,6 +683,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
