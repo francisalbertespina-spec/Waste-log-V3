@@ -27,11 +27,6 @@ const scriptURL = "https://script.google.com/macros/s/AKfycby_xEM6AoFpFPUBc3jZlJ
 // working script = Deployment 1-26-2026-rev6
 // const scriptURL = "https://script.google.com/macros/s/AKfycbwyAIPb1OXyEWjau0-3OM4_e5FWLr-wuBHTx0otEzPABLomL5FRi4BsPs39bF1VfClA/exec";
 
-
-// Toast notification system
-let toastQueue = [];
-let activeToast = null;
-
 function showToast(message, type = "info", options = {}) {
   toastQueue.push({ message, type, options });
   if (!activeToast) processToastQueue();
@@ -718,6 +713,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
