@@ -2,8 +2,8 @@ let loadedRows = [];
 let selectedPackage = "";
 let compressedImageBase64 = "";
 let pendingRequestId = null;
+let toastQueue = [];
 let activeToast = null;
-let activeToastTimer = null;
 window.isUploading = false;
 
 
@@ -29,68 +29,71 @@ const scriptURL = "https://script.google.com/macros/s/AKfycby_xEM6AoFpFPUBc3jZlJ
 
 
 // Toast notification system
-function showToast(message, type = 'info', options = {}) {
-  const icons = { 
-    success: '✅', 
-    error: '❌', 
-    info: 'ℹ️' 
-  };
+let toastQueue = [];
+let activeToast = null;
 
-  const { persistent = false, spinner = false, duration = 3000 } = options;
+function showToast(message, type = "info", options = {}) {
+  toastQueue.push({ message, type, options });
+  if (!activeToast) processToastQueue();
+}
 
-  // 🔥 Remove existing toast
-  if (activeToast) {
-    activeToast.remove();
-    activeToast = null;
-  }
-  if (activeToastTimer) {
-    clearTimeout(activeToastTimer);
-    activeToastTimer = null;
-  }
+function processToastQueue() {
+  if (toastQueue.length === 0) return;
 
-  const toast = document.createElement('div');
+  const { message, type, options } = toastQueue.shift();
+  activeToast = createToast(message, type, options);
+}
+
+function createToast(message, type, options) {
+  const icons = { success: "✅", error: "❌", info: "ℹ️" };
+
+  const toast = document.createElement("div");
   toast.className = `toast ${type}`;
 
-  const spinnerHTML = spinner
+  const spinnerHTML = options.spinner
     ? `<div class="toast-icon"><div class="toast-spinner"></div></div>`
     : `<div class="toast-icon">${icons[type]}</div>`;
-  
+
   toast.innerHTML = `
     ${spinnerHTML}
     <div class="toast-message">${message}</div>
+    <div class="toast-progress"></div>
   `;
 
   document.body.appendChild(toast);
-  activeToast = toast;
 
-  // Animate in (if you use CSS animation)
-  requestAnimationFrame(() => {
-    toast.classList.add("show");
+  let startX = 0;
+  toast.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+  toast.addEventListener("touchmove", e => {
+    const delta = e.touches[0].clientX - startX;
+    if (delta > 0) toast.style.transform = `translateX(${delta}px)`;
+  });
+  toast.addEventListener("touchend", e => {
+    const delta = e.changedTouches[0].clientX - startX;
+    if (delta > 100) dismissToast(toast);
+    else toast.style.transform = "";
   });
 
-  // Auto remove if not persistent
-  if (!persistent) {
-    activeToastTimer = setTimeout(() => {
-      toast.classList.remove("show");
-      setTimeout(() => {
-        if (toast.parentNode) toast.remove();
-        activeToast = null;
-      }, 300);
-    }, duration);
+  let duration = options.persistent ? null : 3000;
+  if (duration) {
+    const bar = toast.querySelector(".toast-progress");
+    bar.style.animation = `toastProgress ${duration}ms linear forwards`;
+
+    setTimeout(() => dismissToast(toast), duration);
   }
 
-  return {
-    remove() {
-      if (!toast) return;
-      toast.classList.remove("show");
-      setTimeout(() => {
-        if (toast.parentNode) toast.remove();
-        activeToast = null;
-      }, 300);
-      if (activeToastTimer) clearTimeout(activeToastTimer);
-    }
-  };
+  return toast;
 }
+
+function dismissToast(toast) {
+  toast.style.animation = "slideInRight 0.3s ease-out reverse";
+  setTimeout(() => {
+    toast.remove();
+    activeToast = null;
+    processToastQueue();
+  }, 300);
+}
+
 
 
 
@@ -715,6 +718,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
