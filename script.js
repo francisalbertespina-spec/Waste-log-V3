@@ -299,9 +299,17 @@ async function addEntry() {
     const result = await res.json();
 
     // 🔐 backend-trusted error handling
+    if (result.error === "Duplicate request") {
+      uploadToast.remove();
+      showToast("Entry already saved.", "success");
+      pendingRequestId = null;
+      return;
+    }
+
     if (!res.ok || result.error) {
       throw new Error(result.error || "Server error");
     }
+
 
     uploadToast.remove();
     showToast("Entry saved successfully!", "success");
@@ -649,6 +657,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
