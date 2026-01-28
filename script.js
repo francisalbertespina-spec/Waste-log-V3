@@ -1,6 +1,7 @@
 let loadedRows = [];
 let selectedPackage = "";
 let compressedImageBase64 = "";
+let pendingRequestId = null;
 window.isUploading = false;
 
 
@@ -265,9 +266,14 @@ async function addEntry() {
       persistent: true,
       spinner: true
     });
-    const requestId = crypto.randomUUID(); // ✅ new ID per click
+
+    if (!pendingRequestId) {
+      pendingRequestId = crypto.randomUUID();
+    }
+
+    
     const rowData = {
-      requestId: requestId,
+      requestId: pendingRequestId,
       package: selectedPackage,
       date: document.getElementById("date").value,
       volume: document.getElementById("volume").value,
@@ -299,6 +305,8 @@ async function addEntry() {
 
     uploadToast.remove();
     showToast("Entry saved successfully!", "success");
+    pendingRequestId = null;
+
 
     // Reset form
     document.getElementById("date").value = "";
@@ -641,6 +649,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
