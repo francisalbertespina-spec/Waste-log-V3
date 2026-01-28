@@ -267,6 +267,7 @@ async function addEntry() {
     });
 
     const rowData = {
+      requestId: crypto.randomUUID(),
       package: selectedPackage,
       date: document.getElementById("date").value,
       volume: document.getElementById("volume").value,
@@ -639,6 +640,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
