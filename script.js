@@ -6,8 +6,8 @@ window.isUploading = false;
 
 const DEV_MODE = false; // Set to false for production
 
-
-const scriptURL = "https://script.google.com/macros/s/AKfycbyzlxISJwaO6O_pWauC9dYT7TPz3NKs6i3h9imFMntB5uTVdf31reibQAzFaLJoS9eJ/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbzRQ0-OLd4g1b61_s3gXRtKXyg58z8iFNm1-nGDKlOsaFyw_hgio-sUkpzYRdS26ktH/exec";
+// const scriptURL = "https://script.google.com/macros/s/AKfycbyzlxISJwaO6O_pWauC9dYT7TPz3NKs6i3h9imFMntB5uTVdf31reibQAzFaLJoS9eJ/exec";
 
 
 // Waste-Log-Auth-V3
@@ -265,9 +265,9 @@ async function addEntry() {
       persistent: true,
       spinner: true
     });
-
+    const requestId = crypto.randomUUID(); // ✅ new ID per click
     const rowData = {
-      requestId: crypto.randomUUID(),
+      requestId: requestId,
       package: selectedPackage,
       date: document.getElementById("date").value,
       volume: document.getElementById("volume").value,
@@ -335,6 +335,7 @@ async function addEntry() {
   } finally {
     window.isUploading = false;
     submitBtn.disabled = false;
+    if (slowTimer) clearTimeout(slowTimer);
   }
 }
 
@@ -640,6 +641,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
