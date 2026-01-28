@@ -256,6 +256,32 @@ function fetchWithTimeout(resource, options = {}, timeout = 30000) {
   ]);
 }
 
+// reset form
+function resetFormAfterSuccess() {
+  pendingRequestId = null;
+
+  document.getElementById("date").value = "";
+  document.getElementById("volume").value = "";
+  document.getElementById("waste").value = "";
+
+  const photoInput = document.getElementById("photo");
+  if (photoInput) photoInput.value = null;
+
+  compressedImageBase64 = "";
+
+  const uploadDiv = document.querySelector(".photo-upload");
+  if (uploadDiv) uploadDiv.classList.remove("has-image");
+
+  const img = uploadDiv?.querySelector("img");
+  if (img) img.remove();
+
+  const placeholder = uploadDiv?.querySelector(".placeholder");
+  if (placeholder) placeholder.style.display = "block";
+
+  const modal = document.getElementById("modal");
+  if (modal) modal.classList.add("active");
+}
+
 
 // Add entry
 async function addEntry() {
@@ -665,6 +691,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
