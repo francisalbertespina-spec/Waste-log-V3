@@ -6,7 +6,7 @@ window.isUploading = false;
 
 const DEV_MODE = false; // Set to false for production
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbzRQ0-OLd4g1b61_s3gXRtKXyg58z8iFNm1-nGDKlOsaFyw_hgio-sUkpzYRdS26ktH/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbwpySTlKLdt5sn5oI6NA_59vjjeDpsGPlQfeixkwX11wpIoOTLs8wdor7c-p8_rn5ow/exec";
 // const scriptURL = "https://script.google.com/macros/s/AKfycbyzlxISJwaO6O_pWauC9dYT7TPz3NKs6i3h9imFMntB5uTVdf31reibQAzFaLJoS9eJ/exec";
 
 
@@ -641,6 +641,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
