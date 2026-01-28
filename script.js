@@ -2,6 +2,8 @@ let loadedRows = [];
 let selectedPackage = "";
 let compressedImageBase64 = "";
 let pendingRequestId = null;
+let activeToast = null;
+let activeToastTimer = null;
 window.isUploading = false;
 
 
@@ -34,11 +36,22 @@ function showToast(message, type = 'info', options = {}) {
     info: 'ℹ️' 
   };
 
+  const { persistent = false, spinner = false, duration = 3000 } = options;
+
+  // 🔥 Remove existing toast
+  if (activeToast) {
+    activeToast.remove();
+    activeToast = null;
+  }
+  if (activeToastTimer) {
+    clearTimeout(activeToastTimer);
+    activeToastTimer = null;
+  }
+
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
 
-  // Spinner HTML (only if requested)
- const spinnerHTML = options.spinner
+  const spinnerHTML = spinner
     ? `<div class="toast-icon"><div class="toast-spinner"></div></div>`
     : `<div class="toast-icon">${icons[type]}</div>`;
   
@@ -47,19 +60,38 @@ function showToast(message, type = 'info', options = {}) {
     <div class="toast-message">${message}</div>
   `;
 
-
   document.body.appendChild(toast);
+  activeToast = toast;
 
-  // Auto-remove ONLY if not persistent
-  if (!options.persistent) {
-    setTimeout(() => {
-      toast.style.animation = 'slideInRight 0.3s ease-out reverse';
-      setTimeout(() => toast.remove(), 300);
-    }, 3000);
+  // Animate in (if you use CSS animation)
+  requestAnimationFrame(() => {
+    toast.classList.add("show");
+  });
+
+  // Auto remove if not persistent
+  if (!persistent) {
+    activeToastTimer = setTimeout(() => {
+      toast.classList.remove("show");
+      setTimeout(() => {
+        if (toast.parentNode) toast.remove();
+        activeToast = null;
+      }, 300);
+    }, duration);
   }
 
-  return toast; // allows manual remove
+  return {
+    remove() {
+      if (!toast) return;
+      toast.classList.remove("show");
+      setTimeout(() => {
+        if (toast.parentNode) toast.remove();
+        activeToast = null;
+      }, 300);
+      if (activeToastTimer) clearTimeout(activeToastTimer);
+    }
+  };
 }
+
 
 
 
@@ -683,6 +715,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
