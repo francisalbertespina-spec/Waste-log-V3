@@ -461,7 +461,6 @@ async function loadHistory() {
         day: "numeric"
       });
 
-      const imgUrl = convertDriveLink(r[5]);
 
       let imageUrl = "";
       if (r[5]) {
@@ -691,6 +690,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
