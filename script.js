@@ -4,6 +4,7 @@ let compressedImageBase64 = "";
 let pendingRequestId = null;
 let toastQueue = [];
 let activeToast = null;
+let toastTimer = null;
 window.isUploading = false;
 
 
@@ -28,64 +29,50 @@ const scriptURL = "https://script.google.com/macros/s/AKfycby_xEM6AoFpFPUBc3jZlJ
 // const scriptURL = "https://script.google.com/macros/s/AKfycbwyAIPb1OXyEWjau0-3OM4_e5FWLr-wuBHTx0otEzPABLomL5FRi4BsPs39bF1VfClA/exec";
 
 function showToast(message, type = "info", options = {}) {
-  toastQueue.push({ message, type, options });
-  if (!activeToast) processToastQueue();
-}
+  const { persistent = false, spinner = false, duration = 3000 } = options;
 
-function processToastQueue() {
-  if (toastQueue.length === 0) return;
-
-  const { message, type, options } = toastQueue.shift();
-  activeToast = createToast(message, type, options);
-}
-
-function createToast(message, type, options) {
-  const icons = { success: "✅", error: "❌", info: "ℹ️" };
+  // remove existing toast
+  if (activeToast) {
+    activeToast.remove();
+    activeToast = null;
+  }
+  if (toastTimer) {
+    clearTimeout(toastTimer);
+    toastTimer = null;
+  }
 
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
 
-  const spinnerHTML = options.spinner
-    ? `<div class="toast-icon"><div class="toast-spinner"></div></div>`
-    : `<div class="toast-icon">${icons[type]}</div>`;
+  if (spinner) {
+    const spin = document.createElement("span");
+    spin.className = "spinner";
+    toast.appendChild(spin);
+  }
 
-  toast.innerHTML = `
-    ${spinnerHTML}
-    <div class="toast-message">${message}</div>
-    <div class="toast-progress"></div>
-  `;
+  const text = document.createElement("span");
+  text.textContent = message;
+  toast.appendChild(text);
 
   document.body.appendChild(toast);
+  activeToast = toast;
 
-  let startX = 0;
-  toast.addEventListener("touchstart", e => startX = e.touches[0].clientX);
-  toast.addEventListener("touchmove", e => {
-    const delta = e.touches[0].clientX - startX;
-    if (delta > 0) toast.style.transform = `translateX(${delta}px)`;
-  });
-  toast.addEventListener("touchend", e => {
-    const delta = e.changedTouches[0].clientX - startX;
-    if (delta > 100) dismissToast(toast);
-    else toast.style.transform = "";
-  });
-
-  let duration = options.persistent ? null : 3000;
-  if (duration) {
-    const bar = toast.querySelector(".toast-progress");
-    bar.style.animation = `toastProgress ${duration}ms linear forwards`;
-
-    setTimeout(() => dismissToast(toast), duration);
+  if (!persistent) {
+    toastTimer = setTimeout(() => {
+      dismissToast(toast);
+    }, duration);
   }
 
   return toast;
 }
 
 function dismissToast(toast) {
-  toast.style.animation = "slideInRight 0.3s ease-out reverse";
+  if (!toast) return;
+  toast.classList.add("hide");
+
   setTimeout(() => {
+    if (toast === activeToast) activeToast = null;
     toast.remove();
-    activeToast = null;
-    processToastQueue();
   }, 300);
 }
 
@@ -693,3 +680,4 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
