@@ -45,7 +45,7 @@ function processToastQueue() {
 
   if (spinner) {
     const spin = document.createElement("span");
-    spin.className = "spinner";
+    spin.className = "toast-spinner";
     toast.appendChild(spin);
   }
 
@@ -63,6 +63,9 @@ function processToastQueue() {
 
 function dismissToast(toast) {
   if (!toast) return;
+
+  clearTimeout(toastTimer);
+  toastTimer = null;
 
   toast.classList.add("hide");
 
@@ -671,6 +674,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
