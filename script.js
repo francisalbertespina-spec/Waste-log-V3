@@ -317,7 +317,7 @@ async function addEntry() {
       return;
     }
 
-    // 🔔 show persistent spinner toast
+    // 🔔 spinner toast
     showToast("Uploading entry...", "info", { 
       persistent: true,
       spinner: true
@@ -352,7 +352,7 @@ async function addEntry() {
 
     const result = await res.json();
 
-    // 🛑 Duplicate request
+    // 🛑 Duplicate
     if (result.error === "Duplicate request") {
       if (activeToast) dismissToast(activeToast);
       showToast("Entry already saved.", "success");
@@ -387,7 +387,6 @@ async function addEntry() {
     if (slowTimer) clearTimeout(slowTimer);
   }
 }
-
 
 
 
@@ -690,6 +689,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
