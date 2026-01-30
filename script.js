@@ -40,24 +40,37 @@ function processToastQueue() {
 
   const { message, type, persistent, spinner, duration } = toastQueue.shift();
 
+  const icons = { success: "✅", error: "❌", info: "ℹ️" };
+
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
 
+  // ICON or SPINNER
+  const iconWrap = document.createElement("div");
+  iconWrap.className = "toast-icon";
+
   if (spinner) {
-    const spin = document.createElement("span");
-    spin.className = "toast-spinner";
-    toast.appendChild(spin);
+    const spin = document.createElement("div");
+    spin.className = "toast-spinner";   // small spinner
+    iconWrap.appendChild(spin);
+  } else {
+    iconWrap.textContent = icons[type] || "ℹ️";
   }
 
-  const text = document.createElement("span");
-  text.textContent = message;
-  toast.appendChild(text);
+  toast.appendChild(iconWrap);
+
+  // MESSAGE
+  const msg = document.createElement("div");
+  msg.className = "toast-message";
+  msg.textContent = message;
+  toast.appendChild(msg);
 
   document.body.appendChild(toast);
   activeToast = toast;
 
+  // AUTO DISMISS
   if (!persistent) {
-    toastTimer = setTimeout(() => dismissToast(toast), duration);
+    toastTimer = setTimeout(() => dismissToast(toast), duration || 3000);
   }
 }
 
@@ -674,6 +687,7 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
 
 
