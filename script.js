@@ -367,7 +367,10 @@ async function addEntry() {
     // ✅ success
     if (activeToast) dismissToast(activeToast);
     showToast("Entry saved successfully!", "success");
-    resetFormAfterSuccess();
+
+    setTimeout(() => {
+      resetFormAfterSuccess();
+    }, 3000);
 
   } catch (err) {
     if (activeToast) dismissToast(activeToast);
@@ -387,6 +390,7 @@ async function addEntry() {
     if (slowTimer) clearTimeout(slowTimer);
   }
 }
+
 
 
 
@@ -689,41 +693,3 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
