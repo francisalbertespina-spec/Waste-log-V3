@@ -28,18 +28,17 @@ const scriptURL = "https://script.google.com/macros/s/AKfycby_xEM6AoFpFPUBc3jZlJ
 // working script = Deployment 1-26-2026-rev6
 // const scriptURL = "https://script.google.com/macros/s/AKfycbwyAIPb1OXyEWjau0-3OM4_e5FWLr-wuBHTx0otEzPABLomL5FRi4BsPs39bF1VfClA/exec";
 
-function showToast(message, type = "info", options = {}) {
+unction showToast(message, type = "info", options = {}) {
   const { persistent = false, spinner = false, duration = 3000 } = options;
 
-  // remove existing toast
-  if (activeToast) {
-    activeToast.remove();
-    activeToast = null;
-  }
-  if (toastTimer) {
-    clearTimeout(toastTimer);
-    toastTimer = null;
-  }
+  toastQueue.push({ message, type, persistent, spinner, duration });
+  processToastQueue();
+}
+
+function processToastQueue() {
+  if (activeToast || toastQueue.length === 0) return;
+
+  const { message, type, persistent, spinner, duration } = toastQueue.shift();
 
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
@@ -58,21 +57,19 @@ function showToast(message, type = "info", options = {}) {
   activeToast = toast;
 
   if (!persistent) {
-    toastTimer = setTimeout(() => {
-      dismissToast(toast);
-    }, duration);
+    toastTimer = setTimeout(() => dismissToast(toast), duration);
   }
-
-  return toast;
 }
 
 function dismissToast(toast) {
   if (!toast) return;
+
   toast.classList.add("hide");
 
   setTimeout(() => {
-    if (toast === activeToast) activeToast = null;
     toast.remove();
+    activeToast = null;
+    processToastQueue();
   }, 300);
 }
 
@@ -272,7 +269,6 @@ function resetFormAfterSuccess() {
 
 // Add entry
 async function addEntry() {
-
   if (window.isUploading) return;
   window.isUploading = true;
 
@@ -280,6 +276,7 @@ async function addEntry() {
   submitBtn.disabled = true;
 
   let slowTimer;
+  let spinnerToastActive = true;
 
   try {
     const token = localStorage.getItem("userToken");
@@ -304,11 +301,8 @@ async function addEntry() {
       return;
     }
 
-    // 🔔 spinner toast
-    showToast("Uploading entry...", "info", { 
-      persistent: true,
-      spinner: true
-    });
+    // Spinner toast
+    showToast("Uploading entry...", "info", { persistent: true, spinner: true });
 
     if (!pendingRequestId) {
       pendingRequestId = crypto.randomUUID();
@@ -325,7 +319,6 @@ async function addEntry() {
       imageName: `Waste_${Date.now()}.jpg`
     };
 
-    // Slow warning
     slowTimer = setTimeout(() => {
       showToast("Still uploading… please wait", "info");
     }, 8000);
@@ -339,11 +332,10 @@ async function addEntry() {
 
     const result = await res.json();
 
-    // 🛑 Duplicate
     if (result.error === "Duplicate request") {
-      if (activeToast) dismissToast(activeToast);
+      dismissToast(activeToast);
       showToast("Entry already saved.", "success");
-      resetFormAfterSuccess();
+      setTimeout(resetFormAfterSuccess, 3000);
       return;
     }
 
@@ -351,17 +343,16 @@ async function addEntry() {
       throw new Error(result.error || "Server error");
     }
 
-    // ✅ success
-    if (activeToast) dismissToast(activeToast);
+    // Success
+    dismissToast(activeToast);
     showToast("Entry saved successfully!", "success");
 
-    setTimeout(() => {
-      resetFormAfterSuccess();
-    }, 3000);
+    // modal AFTER toast finishes
+    setTimeout(resetFormAfterSuccess, 3000);
 
   } catch (err) {
-    if (activeToast) dismissToast(activeToast);
-    if (slowTimer) clearTimeout(slowTimer);
+    dismissToast(activeToast);
+    clearTimeout(slowTimer);
 
     if (err.message === "Upload timeout") {
       showToast("Upload timed out. Please try again.", "error");
@@ -374,7 +365,7 @@ async function addEntry() {
   } finally {
     window.isUploading = false;
     submitBtn.disabled = false;
-    if (slowTimer) clearTimeout(slowTimer);
+    clearTimeout(slowTimer);
   }
 }
 
@@ -680,4 +671,5 @@ function closeImageModal() {
   img.src = "";
   modal.style.display = "none";
 }
+
 
